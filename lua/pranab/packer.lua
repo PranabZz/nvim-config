@@ -57,18 +57,32 @@ return require('packer').startup(function(use)
         run = ':TSUpdate',
     }
 
-    -- 6. Completion & Formatting
     use({
         'Saghen/blink.cmp',
         tag = 'v0.*',
         config = function()
             require('blink.cmp').setup({
-                keymap = { preset = 'default' },
-                sources = { default = { 'lsp', 'path', 'snippets', 'buffer' } },
+                keymap = {
+                    preset = 'none', -- We'll define them manually to be safe
+                    ['<cr>'] = { 'accept', 'fallback' },
+                    ['<Tab>'] = { 'select_next', 'fallback' },
+                    ['<S-Tab>'] = { 'select_prev', 'fallback' },
+                },
+
+                completion = {
+                    -- This ensures the first item is ALWAYS highlighted automatically
+                    list = { selection = { preselect = true, auto_insert = false } },
+
+                    -- This shows the ghost text (optional, but helpful)
+                    ghost_text = { enabled = true },
+                },
+
+                sources = {
+                    default = { 'lsp', 'path', 'snippets', 'buffer' },
+                },
             })
         end
     })
-
     use({
         'stevearc/conform.nvim',
         config = function()
@@ -79,6 +93,8 @@ return require('packer').startup(function(use)
                     javascript = { "prettierd", "prettier" },
                     typescript = { "prettierd", "prettier" },
                     dart = { "dart_format" },
+                    php = { "php-cs-fixer" }, -- PHP formatter
+                    cpp = { "clang-format" }, -- C++ formatter
                 },
                 format_on_save = { timeout_ms = 500, lsp_fallback = true },
             })
