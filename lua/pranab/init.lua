@@ -14,7 +14,7 @@ require("nvim-tree").setup()
 -- 2. Define Server Configurations
 -- Neovim 0.11+ can automatically find these in your 'lsp/' directory, 
 -- but you can also enable them directly if using default settings:
-vim.lsp.enable({ 'lua_ls', 'dartls', 'gopls', 'pyright', 'clangd', 'vtsls' })
+vim.lsp.enable({ 'lua_ls', 'dartls', 'gopls', 'pyright', 'clangd', 'intelephense', 'laravel_ls', 'tsserver' })
 
 -- 3. Configure Native Autocompletion
 -- This triggers the completion menu based on the LSP's 'triggerCharacters'

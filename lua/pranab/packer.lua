@@ -46,15 +46,28 @@ return require('packer').startup(function(use)
         config = function() require('telescope').setup {} end
     }
 
-    use {
-        'nvim-tree/nvim-tree.lua',
-        config = function() require("nvim-tree").setup() end
-    }
+
 
     -- 5. Treesitter (Merged duplicate entries)
     use {
         'nvim-treesitter/nvim-treesitter',
-        run = ':TSUpdate',
+        config = function()
+            require('nvim-treesitter.configs').setup {
+                ensure_installed = {
+                    'rust',
+                    'javascript',
+                    'typescript',
+                    'php',
+                    'dart',
+                    'zig',
+                    'python'
+                },
+                auto_install = true, -- automatically install new parsers
+                highlight = {
+                    enable = true,
+                },
+            }
+        end
     }
 
     use({
@@ -116,4 +129,22 @@ return require('packer').startup(function(use)
             require("which-key").setup {}
         end
     }
+
+    use({
+        'nvim-tree/nvim-tree.lua',
+        requires = {
+            'kyazdani42/nvim-web-devicons', -- optional, for file icons
+        },
+        config = function()
+            require('nvim-tree').setup {
+                respect_buf_cwd = true,
+                view = {
+                    adaptive_size = true,
+                    side = 'left',
+                }
+            }
+        end
+    })
+
+    use 'lukas-reineke/indent-blankline.nvim'
 end)
