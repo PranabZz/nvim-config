@@ -51,23 +51,7 @@ return require('packer').startup(function(use)
     -- 5. Treesitter (Merged duplicate entries)
     use {
         'nvim-treesitter/nvim-treesitter',
-        config = function()
-            require('nvim-treesitter.configs').setup {
-                ensure_installed = {
-                    'rust',
-                    'javascript',
-                    'typescript',
-                    'php',
-                    'dart',
-                    'zig',
-                    'python'
-                },
-                auto_install = true, -- automatically install new parsers
-                highlight = {
-                    enable = true,
-                },
-            }
-        end
+        -- The configuration will be moved to after/plugin/treesitter.lua
     }
 
     use({
