@@ -7,6 +7,7 @@ return require('packer').startup(function(use)
     use 'nvim-tree/nvim-web-devicons' -- Moved to top level so everyone can use it
 
     -- 2. Theme
+    use { "catppuccin/nvim", as = "catppuccin" }
     use { "rebelot/kanagawa.nvim", config = function() vim.cmd("colorscheme kanagawa") end }
 
     -- 3. The Dashboard (Fixed)
@@ -54,79 +55,14 @@ return require('packer').startup(function(use)
         -- The configuration will be moved to after/plugin/treesitter.lua
     }
 
-    -- 5. Treesitter (Merged duplicate entries)
-    use {
-        'nvim-treesitter/nvim-treesitter',
-        -- The configuration will be moved to after/plugin/treesitter.lua
-    }
-
-    -- nvim-cmp and its sources (replacing blink.cmp)
+    -- nvim-cmp and its sources
     use 'hrsh7th/nvim-cmp'         -- The completion plugin
     use 'hrsh7th/cmp-buffer'       -- Source for text in buffer
     use 'hrsh7th/cmp-path'         -- Source for file system paths
     use 'hrsh7th/cmp-cmdline'      -- Source for command line history
     use 'saadparwaiz1/cmp_luasnip' -- nvim-cmp source for LuaSnip
     use 'L3MON4D3/LuaSnip'         -- Snippet engine
-
-    use({ -- nvim-cmp configuration
-        'hrsh7th/nvim-cmp',
-        config = function()
-            local cmp = require('cmp')
-            local luasnip = require('luasnip')
-
-            cmp.setup({
-                snippet = {
-                    expand = function(args)
-                        luasnip.lsp_expand(args.body)
-                    end,
-                },
-                mapping = cmp.mapping.preset.insert({
-                    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-                    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-                    ['<C-Space>'] = cmp.mapping.complete(),
-                    ['<C-e>'] = cmp.mapping.abort(),
-                    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-                    ['<Tab>'] = cmp.mapping(function(fallback)
-                        if cmp.visible() then
-                            cmp.select_next_item()
-                        elseif luasnip.expand_or_jumpable() then
-                            luasnip.expand_or_jump()
-                        else
-                            fallback()
-                        end
-                    end, { 'i', 's' }),
-                    ['<S-Tab>'] = cmp.mapping(function(fallback)
-                        if cmp.visible() then
-                            cmp.select_prev_item()
-                        elseif luasnip.jumpable(-1) then
-                            luasnip.jump(-1)
-                        else
-                            fallback()
-                        end
-                    end, { 'i', 's' }),
-                }),
-                sources = cmp.config.sources({
-                    { name = 'nvim_lsp' },
-                    { name = 'luasnip' }, -- For snippets
-                    { name = 'buffer' },
-                    { name = 'path' },
-                }),
-            })
-
-            -- Setup cmdline completion
-            cmp.setup.cmdline('/', {
-                sources = cmp.config.sources({
-                    { name = 'buffer' }
-                })
-            })
-            cmp.setup.cmdline(':', {
-                sources = cmp.config.sources({
-                    { name = 'path' },
-                    { name = 'cmdline' }
-                })
-            })
-        end
-    })
+    use 'hrsh7th/cmp-nvim-lsp'     -- LSP source for nvim-cmp
 
     use({
         'stevearc/conform.nvim',
@@ -146,11 +82,10 @@ return require('packer').startup(function(use)
         end,
     })
 
-        use({"williamboman/mason.nvim", config = function() require("mason").setup() end})
+    use({"williamboman/mason.nvim", config = function() require("mason").setup() end})
 
     use("williamboman/mason-lspconfig.nvim")
-    use("neovim/nvim-lspconfig") -- Add this line to include nvim-lspconfig
-    use("hrsh7th/cmp-nvim-lsp") -- Add this line to include cmp-nvim-lsp
+    use("neovim/nvim-lspconfig")
     use({"kdheepak/lazygit.nvim",
         requires = {
             "nvim-lua/plenary.nvim",
