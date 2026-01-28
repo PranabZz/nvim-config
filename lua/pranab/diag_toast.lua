@@ -65,11 +65,29 @@ local function show_toast()
         width = max_width + 2,
         height = #lines,
         style = "minimal",
-        focusable = false,
+        border = "rounded",
+        title = { { " [x] ", "DiagnosticError" } },
+        title_pos = "right",
+        focusable = true,
         noautocmd = true,
     })
 
-    vim.api.nvim_win_set_option(win, "winhl", "NormalFloat:DiagnosticError")
+    -- Enable closing with 'q' or Esc when focused
+    vim.keymap.set("n", "q", close_toast, { buffer = buf, nowait = true })
+    vim.keymap.set("n", "<Esc>", close_toast, { buffer = buf, nowait = true })
+    
+    -- Close when clicking the title area (simulated by allowing focus and manual close)
+    -- We can also use a mouse click mapping if helpful
+    vim.keymap.set("n", "<LeftRelease>", function()
+        local mouse = vim.fn.getmousepos()
+        if mouse.winid == win then
+            -- If user clicked inside/on border of this window, we can just close it
+            -- for simplicity if they are interacting with it.
+            close_toast()
+        end
+    end, { buffer = buf })
+
+    vim.api.nvim_win_set_option(win, "winhl", "NormalFloat:DiagnosticError,FloatBorder:DiagnosticError")
     vim.api.nvim_win_set_option(win, "winblend", 12)
 
     state.win = win

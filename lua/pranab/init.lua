@@ -12,9 +12,16 @@ require("pranab.options")
 require("nvim-tree").setup()
 
 -- 2. Configure Mason and LSP
-require("mason").setup()
+require("mason").setup({
+    ensure_installed = { "dart-debug-adapter", "dcm" },
+})
 require("mason-lspconfig").setup({
-    ensure_installed = { "lua_ls", "gopls", "pyright", "clangd", "intelephense", "laravel_ls", "ts_ls" },
+    ensure_installed = { "lua_ls", "gopls", "pyright", "clangd", "intelephense", "laravel_ls", "ts_ls", "dartls" },
+    handlers = {
+        function(server_name, config)
+            require("lspconfig")[server_name].setup(config)
+        end,
+    },
 })
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -37,15 +44,9 @@ vim.lsp.config('laravel_ls', { capabilities = capabilities })
 vim.lsp.enable('laravel_ls')
 vim.lsp.config('ts_ls', { capabilities = capabilities })
 vim.lsp.enable('ts_ls')
-
--- Dart / Flutter
-vim.lsp.config('dartls', {
-    cmd = { "dart", "language-server", "--protocol=lsp" },
-    filetypes = { "dart" },
-    root_dir = lspconfig.util.root_pattern("pubspec.yaml"),
-    capabilities = capabilities,
-})
+vim.lsp.config('dartls', { capabilities = capabilities })
 vim.lsp.enable('dartls')
+
 
 -- 3. Configure LSP keymaps
 vim.api.nvim_create_autocmd("LspAttach", {
