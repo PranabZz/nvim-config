@@ -5,6 +5,12 @@ return require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
     use 'nvim-lua/plenary.nvim'
     use 'nvim-tree/nvim-web-devicons' -- Moved to top level so everyone can use it
+    use {
+        'stevearc/dressing.nvim',
+        config = function()
+            require('dressing').setup({})
+        end,
+    }
 
     -- 2. Theme
     use { "catppuccin/nvim", as = "catppuccin" }

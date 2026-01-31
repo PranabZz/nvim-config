@@ -8,6 +8,7 @@ vim.g.loaded_netrwPlugin = 1
 require("pranab.remap")
 require("pranab.packer")
 require("pranab.options")
+require("pranab.file_management")
 
 require("nvim-tree").setup()
 

@@ -78,3 +78,7 @@ vim.keymap.set("n", "<leader>gg", ":LazyGit<CR>", { noremap = true, silent = tru
 -- Move text up and down in Visual Mode
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+
+vim.keymap.set('n', '<leader>fm', function()
+    require('pranab.file_management').create_entry_dialog()
+end, { desc = "Create File/Folder" })
