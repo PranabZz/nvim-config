@@ -1,3 +1,4 @@
+
 require('nvim-treesitter.config').setup {
     ensure_installed = {
         'rust',
@@ -6,11 +7,9 @@ require('nvim-treesitter.config').setup {
         'php',
         'dart',
         'zig',
-        'python',
-        'kotlin',
-        'swift',
+        'python'
     },
-    auto_install = true,
+    auto_install = true, -- automatically install new parsers
     highlight = {
         enable = true,
     },
